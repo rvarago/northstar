@@ -1,0 +1,973 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Northstar</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="client/client.html"><strong aria-hidden="true">1.</strong> Implementing a client</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="client/connect.html"><strong aria-hidden="true">1.1.</strong> Interacting with Northstar</a></li><li class="chapter-item expanded "><a href="client/repositories.html"><strong aria-hidden="true">1.2.</strong> Repositories</a></li><li class="chapter-item expanded "><a href="client/containers.html"><strong aria-hidden="true">1.3.</strong> Containers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="client/list_containers.html"><strong aria-hidden="true">1.3.1.</strong> List containers</a></li><li class="chapter-item expanded "><a href="client/start_containers.html"><strong aria-hidden="true">1.3.2.</strong> Starting containers and notifications</a></li><li class="chapter-item expanded "><a href="client/stop_containers.html"><strong aria-hidden="true">1.3.3.</strong> Stopping containers</a></li><li class="chapter-item expanded "><a href="client/install_containers.html"><strong aria-hidden="true">1.3.4.</strong> Installing and uninstalling containers</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="sextant/npk.html"><strong aria-hidden="true">2.</strong> Working with NPK files</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sextant/pack.html"><strong aria-hidden="true">2.1.</strong> Packing an NPK</a></li><li class="chapter-item expanded "><a href="sextant/unpack.html"><strong aria-hidden="true">2.2.</strong> Unpacking an NPK</a></li><li class="chapter-item expanded "><a href="sextant/inspect.html"><strong aria-hidden="true">2.3.</strong> Inspecting an NPK</a></li><li class="chapter-item expanded "><a href="sextant/gen_repo_keys.html"><strong aria-hidden="true">2.4.</strong> Generating Repository Keys</a></li><li class="chapter-item expanded "><a href="sextant/npk_format_reference.html"><strong aria-hidden="true">2.5.</strong> NPK Format Reference</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Northstar</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="implementing-a-client"><a class="header" href="#implementing-a-client">Implementing a client</a></h1>
+<p>This tutorial demonstrates how to interact with <strong>Northstar</strong> using its <strong>API</strong>.</p>
+<p><strong>Northstar</strong> uses <strong>JSON</strong> to encode the messages shared with clients. This is
+a common approach that facilitates clients being implemented in any programming
+language.  However, <strong>Northstar</strong> as a library, provides a convenient <code>Client</code>
+type that can be used for a simpler client implementation using <strong>Rust</strong>.</p>
+<p>For general purposes, the snippets shown in this tutorial are
+written in <strong>Python</strong> for its simplicity and easy translation to other
+languages.</p>
+<h1 id="interation-with-northstar"><a class="header" href="#interation-with-northstar">Interation with Northstar</a></h1>
+<p>Northstar interacts with clients through a <code>TCP</code> socket. The clients exchange
+messages with Northstar in the form of requests and responses encoded in
+<strong>JSON</strong>. These requests and responses are a direct serialization of the
+structures defined in <code>api/model.rs</code>.</p>
+<p>The first step is to establish a connection with Northstar using a socket.</p>
+<pre><code class="language-python">import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((&quot;localhost&quot;, 4200))
+</code></pre>
+<p>Northstar uses the port <code>4200</code> by default. Check the configuration (see
+<code>northstar.toml</code>) for the port used by the target instance.</p>
+<p>The messages sent between Northstar and the clients have two fields, <code>id</code> and
+<code>payload</code>.  The <code>id</code> field is a generated <code>UUID</code> version 4 identifier used to
+tag a message exchange.</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;UUID&quot;,
+    &quot;payload&quot;: {
+        MESSAGE_TYPE: { ... }
+    }
+}
+</code></pre>
+<p>The <code>MESSAGE_TYPE</code> can be either <code>&quot;Request&quot;</code>, <code>&quot;Response&quot;</code>, or <code>&quot;Notification&quot;</code>.
+Northstar should only send responses and notifications to clients.</p>
+<h1 id="northstar-repositories"><a class="header" href="#northstar-repositories">Northstar Repositories</a></h1>
+<p>Repositories are used to group sets of containers. These are specified in
+the Northstar configuration (see <code>northstar.toml</code>).</p>
+<p>Containers can be added or removed from repositories at runtime by
+<strong>installing</strong> and <strong>uninstalling</strong> them.</p>
+<p>Repositories specified in the configuration are accessed at the start of
+Northstar. Currently it is not possible to add or remove repositories at
+runtime.</p>
+<p>If a repository specifies a signing key in the configuration, the contents of the
+containers are checked with their signature information. Otherwise, this step is
+skipped. Notice that for the verification step, it is required that the
+underlying system has <code>verity</code> support enabled. Containers installed at runtime
+to repositories with a signing key will also be verified.</p>
+<p>The next block shows the <code>JSON</code> structure that represents the request for the
+repository configuration. It is important to encode this structure without the
+new lines. Also a new line has to be appended to the end of the serialized
+string.</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: &quot;Repositories&quot;
+    }
+}
+</code></pre>
+<p>Here is an example that sends a request for the repository configuration:</p>
+<pre><code class="language-python">import uuid
+import json
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((&quot;localhost&quot;, 4200))
+
+# API Request for repository information
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': 'Repositories'
+    }
+}
+
+# It is required for the API requests to be terminated with a new line '\n'
+request = json.dumps(request) + '\n'
+
+# send the request
+s.send(request.encode('utf-8'))
+
+# receive the list of repositories
+response = s.recv(8000)
+
+# decode the response
+response = json.loads(response.decode('utf-8'))
+
+# The response contains a list with the configured repositories
+# Currently, only the filesystem path of every repository is provided
+# e.g. {'Response': {'Repositories': {'default': {'dir': 'target/northstar/repository'}}}}
+print(response['payload'])
+</code></pre>
+<h1 id="containers"><a class="header" href="#containers">Containers</a></h1>
+<ul>
+<li><a href="client/list_containers.html">List containers</a></li>
+<li><a href="client/start_containers.html">Starting containers and notifications</a></li>
+<li><a href="client/stop_containers.html">Stopping containers</a></li>
+<li><a href="client/install_containers.html">Installing and uninstalling containers</a></li>
+</ul>
+<h1 id="listing-containers"><a class="header" href="#listing-containers">Listing containers</a></h1>
+<p>In the same way as <a href="client/repositories.html">repositories</a>, it is possible to request
+the current state of the Northstar containers. Here is the <code>JSON</code> structure that
+encodes the request for the state of the containers:</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: &quot;Containers&quot;
+    }
+}
+</code></pre>
+<p>The following snippet sends the request for the container information, just as
+the previous example requested the repository configuration.</p>
+<pre><code class="language-python"># The request looks like this:
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': 'Containers'
+    }
+}
+
+# notice the terminating '\n'
+request = json.dumps(request) + '\n'
+
+# send request
+s.send(request.encode('utf-8'))
+
+# receive the list of containers
+response = s.recv(8000)
+
+# Decode the JSON response
+response = json.loads(response.decode('utf-8'))
+
+# The response is a list of containers.
+# Each of these containers will come with the following fields:
+#   - manifest
+#   - process
+#   - repository
+print(response)
+</code></pre>
+<p>The response is quite lengthy and more complex than that of repositories. This
+time, we receive a list of objects corresponding to each container. Each
+of them provides information about the container's manifest, the repository
+where it is installed and possibly information about the system process if it is
+currently executing.</p>
+<p>Here is an example on how to get a list with names of the available containers:</p>
+<pre><code class="language-python">names = []
+for container in response['payload']['Response']['Containers']:
+    names.append(container['manifest']['name'])
+
+# e.g. containers: ['cpueater', 'ferris_says_hello', 'seccomp', 'memeater', ...
+print(f'containers: {names}')
+</code></pre>
+<h1 id="starting-containers-and-notifications"><a class="header" href="#starting-containers-and-notifications">Starting containers and notifications</a></h1>
+<p>Northstar has a notification system where messages are sent to the clients with
+information about events such as:</p>
+<ul>
+<li>Applications starting</li>
+<li>Applications stopping</li>
+<li>Applications installed</li>
+<li>Applications uninstalled</li>
+<li>Exit status of applications</li>
+<li>Shutdown of the runtime</li>
+<li>Applications running out of memory</li>
+</ul>
+<p>Here is the <code>JSON</code> structure requesting that Northstar start a container.
+<code>CONTAINER_NAME</code> is the name of the container specified in the manifest that will be started.</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: {
+            &quot;Start&quot;: CONTAINER_NAME
+        }
+    }
+}
+</code></pre>
+<p>In the following snippet, a request is sent to start the <code>memeater</code> example
+container. After the container is started, we will receive 2 notifications, one signaling the start of the application, and eventually a second one that signals
+the termination of the application (after consuming all the memory, as this example is designed to do).</p>
+<pre><code class="language-python"># start memeater container
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': {
+            'Start': &quot;memeater&quot;
+        }
+    }
+}
+
+# Serialize the request, notice the appended new line
+request = json.dumps(request) + '\n'
+
+# Encode and send the request
+s.send(request.encode('utf-8'))
+
+# Receive the ok response to the request
+# {'Response': {'Ok': None}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Receive the first notification for the start of the container
+# {'Notification': {'ApplicationStarted': ['memeater', '0.0.1']}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Receive the notification for the out of memory
+# {'Notification': {'OutOfMemory': 'memeater'}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+</code></pre>
+<h1 id="stopping-containers"><a class="header" href="#stopping-containers">Stopping containers</a></h1>
+<p>Analogous to <a href="client/start_containers.html">starting containers</a>, this is the <code>JSON</code>
+structure to stop a container:</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: {
+            &quot;Stop&quot;: CONTAINER_NAME
+        }
+    }
+}
+</code></pre>
+<p>Stopping containers is very similar to starting them. In the following snippet
+we start and subsequently stop the <code>hello</code> example container.</p>
+<pre><code class="language-python"># Start hello container
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': {
+            'Start': &quot;hello&quot;
+        }
+    }
+}
+
+# Send the request
+request = json.dumps(request) + '\n'
+s.send(request.encode('utf-8'))
+
+# get ok response
+# {'Response': {'Ok': None}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# get application started notification
+# {'Notification': {'ApplicationStarted': ['hello', '0.0.1']}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Stop hello container
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': {
+            'Stop': &quot;hello&quot;
+        }
+    }
+}
+
+# Send the request
+request = json.dumps(request) + '\n'
+s.send(request.encode('utf-8'))
+
+# Get ok response
+# {'Response': {'Ok': None}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Get notification for the stopped container
+# {'Notification': {'ApplicationStopped': ['hello', '0.0.1']}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+</code></pre>
+<h1 id="installing-and-uninstalling-containers"><a class="header" href="#installing-and-uninstalling-containers">Installing and uninstalling containers</a></h1>
+<p>Installing containers is a bit trickier. First a request to install a new
+container is sent with the target repository and the size of the container <code>npk</code>
+file in bytes. Then the file is directly copied into the socket. If successful,
+an <code>Ok</code> response will be received with a notification of the newly installed
+container. The following is the <code>JSON</code> structure to signal the installation of a
+new container:</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: {
+            &quot;Install&quot;: [REPOSITORY_NAME, NPK_SIZE]
+        }
+    }
+}
+</code></pre>
+<p>The <code>REPOSITORY_NAME</code> is the identifier of the target repository where to
+install the new container (see <a href="client/repositories.html">repositories</a>). <code>NPK_SIZE</code> is
+the size in bytes of the <code>.npk</code> file that will be transfered. The request for
+uninstalling a container requires the name and version of the container
+specified in <code>CONTAINER_NAME</code> and <code>CONTAINER_VERSION</code> correspondingly.</p>
+<pre><code class="language-json">{
+    &quot;id&quot;: &quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;,
+    &quot;payload&quot;: {
+        &quot;Request&quot;: {
+            &quot;Uninstall&quot;: [CONTAINER_NAME, CONTAINER_VERSION]
+        }
+    }
+}
+</code></pre>
+<p>For the following snippet, we can create a dummy container called <code>foo</code>. First,
+we create a directory layout for he container that looks like this:</p>
+<pre><code>foo
+├── manifest.yaml
+└── root
+    └── foo
+</code></pre>
+<p>The file <code>foo</code> inside the <code>root</code> is just a &quot;hello world&quot; binary compiled for the
+host architecture but any other file works for this example. The content for the
+<code>manifest.yaml</code> is the following:</p>
+<pre><code class="language-yaml">name: foo
+version: 0.0.1
+init: /foo
+mounts:
+    /lib:
+        host: /lib
+    /lib64:
+        host: /lib64
+</code></pre>
+<p>Finally, we use <code>sextant</code> to pack the container into a <code>npk</code> file.</p>
+<pre><code class="language-sh">sextant pack --dir foo --out . --key examples/keys/northstar.key
+</code></pre>
+<p>This will produce a file named <code>foo-0.0.1.npk</code> in the current directory. Now we
+can install and uninstall the container in Northstar as follows:</p>
+<pre><code class="language-python">import os
+
+npk = &quot;foo-0.0.1.npk&quot;
+npk_size = os.path.getsize(npk)
+
+# Request to install the container in the &quot;default&quot; repository
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': {
+            'Install': [&quot;default&quot;, npk_size]
+        }
+    }
+}
+
+# Serialize
+request = json.dumps(request) + '\n'
+
+# Send the request
+s.send(request.encode('utf-8'))
+
+# Now we simply copy the file to the socket
+with open(npk, 'rb') as f:
+    chunk = f.read(4096)
+    while chunk:
+        s.send(chunk)
+        chunk = f.read(4096)
+
+# Receive an ok response
+# {'Response': {'Ok': None}}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Get application installed notification
+# {'Notification': {'Install': ['foo', '0.0.1']}}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Uninstall the container
+request = {
+    'id': str(uuid.uuid4()),
+    'payload': {
+        'Request': {
+            'Uninstall': [&quot;foo&quot;, &quot;0.0.1&quot;]
+        }
+    }
+}
+
+# send the request
+request = json.dumps(request) + '\n'
+s.send(request.encode('utf-8'))
+
+# Receive an ok response
+# {'Response': {'Ok': None}}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+
+# Get application uninstalled notification
+# {'Notification': {'Uninstalled': ['foo', '0.0.1']}}}
+response = s.recv(8000)
+print(json.loads(response.decode('utf-8')))
+</code></pre>
+<h1 id="working-with-npk-files"><a class="header" href="#working-with-npk-files">Working with NPK files</a></h1>
+<p>Northstar containers are distributed in the NPK file format.</p>
+<p>NPKs contain both the container's application logic as well as the data files necessary to mount an run the container.
+To facilitate the creation, inspection and modification of NPKs, northstar provides the <code>sextant</code> CLI tool.</p>
+<p>The following chapters describe how to use <code>sextant</code> to work with NPKs and explain the internal structure of the NPK file format.</p>
+<ul>
+<li><a href="sextant/pack.html">Packing an NPK</a></li>
+<li><a href="sextant/unpack.html">Unpacking an NPK</a></li>
+<li><a href="sextant/inspect.html">Inspecting an NPK</a></li>
+<li><a href="sextant/gen_repo_keys.html">Generating Repository Keys</a></li>
+<li><a href="sextant/npk_format_reference.html">NPK Format Reference</a></li>
+</ul>
+<h1 id="packing-an-npk"><a class="header" href="#packing-an-npk">Packing an NPK</a></h1>
+<p>NPKs are created using the <code>pack</code> command of <code>sextant</code>.
+The command requires the following input:</p>
+<ol>
+<li>a manifest file describing the NPK</li>
+<li>a root folder containing all files required at runtime</li>
+</ol>
+<h2 id="the-manifest-file"><a class="header" href="#the-manifest-file">The Manifest File</a></h2>
+<p>The manifest is a YAML file that references all necessary data to mount and execute the container.
+An example <code>manifest.yaml</code> of the <code>hello-world</code> container (found in <code>examples/container/hello-world/manifest.yaml</code>) looks as follows:</p>
+<pre><code class="language-yaml">name: hello-world
+version: 0.0.1
+init: /hello-world
+uid: 1000
+gid: 1000
+env:
+  HELLO: northstar
+io:
+  stdout:
+    log:
+      - DEBUG
+      - hello
+mounts:
+    /lib:
+      host: /lib
+    /lib64:
+      host: /lib64
+    /system:
+      host: /system
+</code></pre>
+<p>More details on the manifest format can be found in the chapter
+<a href="sextant/npk_format_reference.html">NPK Format Reference</a>.</p>
+<h2 id="the-root-folder"><a class="header" href="#the-root-folder">The <code>root</code> Folder</a></h2>
+<p>The root folder contains all the container data that will be available during runtime.
+This includes executable files as well as additional resources.
+During packing, the contents of the folder will be copied to a squashfs image that is then added to the NPK.
+This image file will be mounted by the northstar runtime when the container is run.</p>
+<h2 id="calling-sextant-pack"><a class="header" href="#calling-sextant-pack">Calling <code>sextant pack</code></a></h2>
+<p>Let us <code>pack</code> the <code>hello-world</code> example container under Linux.
+First, we build the <code>hello-world</code> binary from the northstar directory using cargo:</p>
+<pre><code class="language-bash">$ cargo build --release --bin hello-world
+Compiling hello-world v0.1.0 (/home/nori/dev/northstar/examples/container/hello-world)
+Finished release [optimized] target(s) in 2.77s
+</code></pre>
+<p>The resulting binary is found in the <code>target/release</code> directory:</p>
+<pre><code class="language-bash">$ ls target/release/hello-world
+target/release/hello-world
+</code></pre>
+<p>Next, we can crate the destination directory if it does not already exist.
+We will choose <code>target/northstar/repository</code> as our destination as it is the default place where northstar looks for NPKs on startup.
+This default is configured in <code>northstar.toml</code>.</p>
+<pre><code class="language-bash">$ mkdir -p target/northstar/repository
+</code></pre>
+<p>Finally, we are able to call <code>sextant</code> and create the NPK:</p>
+<pre><code class="language-bash">$ target/debug/sextant pack \
+--manifest examples/container/hello-world/manifest.yaml \
+--root target/release/hello-world \
+--out target/northstar/repository
+</code></pre>
+<p>The resulting file can be found in the output directory:</p>
+<pre><code class="language-bash">$ ls target/northstar/repository
+hello-world-0.0.1.npk
+</code></pre>
+<h2 id="signing-an-npk"><a class="header" href="#signing-an-npk">Signing an NPK</a></h2>
+<p>NPKs can be signed using ed25519 signatures.
+If your runtime is configured to check NPK signatures then containers with missing or invalid signatures will not be accepted.
+To create a signed version of our container we have to specify the required private key:</p>
+<pre><code class="language-bash">$ target/debug/sextant pack \
+--manifest examples/container/hello-world/manifest.yaml \
+--root target/release/hello-world \
+--key ./examples/keys/northstar.key \
+--out target/northstar/repository
+</code></pre>
+<p>Chapter <a href="sextant/gen_repo_keys.html">Generating Repository Keys</a> describes how to generate keys suitable for signing and verifying NPKs.</p>
+<h1 id="unpacking-an-npk"><a class="header" href="#unpacking-an-npk">Unpacking an NPK</a></h1>
+<p>NPKs are ZIP files that contain among other things a squashfs image that will be mounted at runtime.
+To extract both the outer ZIP and the inner image, the <code>unpack</code> command of <code>sextant</code> can be used.</p>
+<p>To unpack the <code>hello-world</code> container we packed in the chapter <a href="sextant/pack.html">Packing an NPK</a> we first create an output directory for the extracted contents:</p>
+<pre><code class="language-bash">$ mkdir hello-world-container
+</code></pre>
+<p>Next, we call <code>sextant unpack</code>:</p>
+<pre><code class="language-bash">$ target/debug/sextant unpack \
+--npk ./target/northstar/repository/hello-world-0.0.1.npk \
+--out ./hello-world-container
+</code></pre>
+<p>The extracted container can be found in the directroy we created:</p>
+<pre><code class="language-bash">$ ls hello-world-container
+fs.img  manifest.yaml  signature.yaml  squashfs-root
+</code></pre>
+<p>As we can see, a <code>squashfs-root</code> directory was created.
+It contains the extracted contents of the <code>fs.img</code> squashfs image:</p>
+<pre><code class="language-bash">$ ls hello-world-container/squashfs-root/
+dev  hello-world  lib  lib64  proc  system
+</code></pre>
+<p>We can see the <code>hello-world</code> binary as well as the empty mount points mentioned in the <code>manifest.yaml</code>.</p>
+<h1 id="inspecting-an-npk"><a class="header" href="#inspecting-an-npk">Inspecting an NPK</a></h1>
+<p>To get information about an already packed NPK <code>sextant</code> provides the <code>inspect</code> command.</p>
+<h2 id="inspecting-an-npk-with-default-settings"><a class="header" href="#inspecting-an-npk-with-default-settings">Inspecting an NPK with Default Settings</a></h2>
+<p>Inspecting an NPK without any additional parameters will show the following information:</p>
+<ul>
+<li>Listing of files contained in the NPK</li>
+<li>Contents of manifest.yaml</li>
+<li>Contents of signature.yaml</li>
+<li>Listing of files contained in the compressed squashfs image (<code>fs.img</code>) within the NPK</li>
+</ul>
+<p>For example, inspecting the <code>hello-world</code> example container gives the following output:</p>
+<pre><code class="language-markdown">$ sextant inspect target/northstar/repository/hello-0.0.1.npk 
+# inspection of 'target/northstar/repository/hello-0.0.1.npk'
+## NPK Content
+signature.yaml
+manifest.yaml
+fs.img
+
+## manifest.yaml
+name: hello-world
+version: 0.0.1
+init: /hello-world
+uid: 1000
+gid: 1000
+env:
+  HELLO: northstar
+io:
+  stdout:
+    log:
+      - DEBUG
+      - hello
+mounts:
+    /lib:
+      host: /lib
+    /lib64:
+      host: /lib64
+    /system:
+      host: /system
+</code></pre>
+<h2 id="signatureyaml"><a class="header" href="#signatureyaml">signature.yaml</a></h2>
+<pre><code class="language-yaml">manifest.yaml:
+  hash: ee5967e740febb3a1e018e189ed21412f8bf71d34bea7b506f709d37984e90cc
+fs.img:
+  hash: bd280a499a46d43dade55de78fc5d87f65c3750c851e95aed448066564a3230a
+  verity-hash: 85758440ccc506cd0e73f541443fdf76eae34600dfd04c6d440b50a598fec57f
+  verity-offset: 397312
+---
+key: northstar
+signature: xK0f6gIqaarM8FTbhT/qnhSy4ROK8MsoluA2A6kpDCJaAvoea/41j3tY0c047OUL5f/wmnvqrHGyVQ5rr5rKDw==
+</code></pre>
+<h2 id="squashfs-listing"><a class="header" href="#squashfs-listing">SquashFS listing</a></h2>
+<pre><code class="language-bash">Parallel unsquashfs: Using 32 processors
+1 inodes (11 blocks) to write
+
+drwxr-xr-x user/user                89 2021-03-01 10:15 squashfs-root
+dr--r--r-- user/user                 3 2021-03-01 10:15 squashfs-root/dev
+-rwxr-xr-x user/user           1315816 2021-03-01 10:15 squashfs-root/hello-world
+dr-xr-xr-x user/user                 3 2021-03-01 10:15 squashfs-root/lib
+dr-xr-xr-x user/user                 3 2021-03-01 10:15 squashfs-root/lib64
+dr--r--r-- user/user                 3 2021-03-01 10:15 squashfs-root/proc
+dr-xr-xr-x user/user                 3 2021-03-01 10:15 squashfs-root/system
+</code></pre>
+<h2 id="inspecting-an-npk-with-the---short-parameter"><a class="header" href="#inspecting-an-npk-with-the---short-parameter">Inspecting an NPK with the <code>--short</code> parameter</a></h2>
+<p>To facilitate the inspection of many containers as part of scripts, the <code>inspect</code> command features the <code>--short</code> parameter.
+It condenses the inspection output into a single line with the following information:</p>
+<ul>
+<li>Container name</li>
+<li>Container version</li>
+<li>NPK format version</li>
+<li>Whether or not this is a <a href="sextant/npk_format_reference.html#resource-containers">resource container</a></li>
+</ul>
+<p>Inspecting the <code>hello-world</code> example container with the <code>--short</code> flag gives the following output:</p>
+<pre><code class="language-markdown">$ sextant inspect --short target/northstar/repository/hello-world-0.0.1.npk 
+`name: hello-world, version: 0.0.1, NPK version: 0.0.2, resource container: no`
+</code></pre>
+<h1 id="generating-repository-keys"><a class="header" href="#generating-repository-keys">Generating Repository Keys</a></h1>
+<p>To sign NPKs using <code>sextant</code> we first have to have a suitable key pair.
+This can be generated using the <code>sextant gen-key</code> command.
+The following call creates a new key pair called <code>repokey</code> in the current directory:</p>
+<pre><code class="language-bash">target/debug/sextant gen-key --name repokey --out .
+</code></pre>
+<p>After the call we can see that two files were created:</p>
+<pre><code class="language-bash">$ ls | grep repokey
+repokey.key
+repokey.pub
+</code></pre>
+<p>The private key <code>repokey.key</code> can be used for signing of NPKs (see <a href="sextant/pack.html">Packing an NPK</a>).
+The public key <code>repokey.pub</code> can be used by the northstar runtime to verify NPKs.</p>
+<h1 id="npk-format-reference"><a class="header" href="#npk-format-reference">NPK Format Reference</a></h1>
+<p>NPKs are compressed archives containing both the container's application logic as well as the data files necessary to mount an run the container.</p>
+<p>Internally, an NPK consist of three files:</p>
+<ul>
+<li>manifest.yaml</li>
+<li>signature.yaml</li>
+<li>fs.img</li>
+</ul>
+<h2 id="manifestyaml"><a class="header" href="#manifestyaml">Manifest.yaml</a></h2>
+<p>The file <code>manifest.yaml</code> references all data necessary to mount and execute the container.
+As an example, the <code>manifest.yaml</code> of the <code>memeater</code> example container looks as follows:</p>
+<pre><code class="language-yaml">name: memeater
+version: 0.0.1
+init: /memeater
+uid: 1000
+gid: 1000
+mounts:
+  /lib:
+    host: /lib
+  /lib64:
+    host: /lib64
+  /system:
+    host: /system
+cgroups:
+  memory:
+    limit_in_bytes: 10000000
+    swappiness: 0
+io:
+  stdout:
+    log:
+      - DEBUG
+      - memeater
+</code></pre>
+<h3 id="name"><a class="header" href="#name"><code>name</code></a></h3>
+<p>The name of the container
+Example:</p>
+<pre><code class="language-yaml">name: hello-world
+</code></pre>
+<h3 id="version"><a class="header" href="#version"><code>version</code></a></h3>
+<p>The version of the container
+Example:</p>
+<pre><code class="language-yaml">version: 0.0.1
+</code></pre>
+<h3 id="init"><a class="header" href="#init"><code>init</code></a></h3>
+<p>The binary executed when the container is run
+Example:</p>
+<pre><code class="language-yaml">init: /hello-world
+</code></pre>
+<h3 id="args-optional"><a class="header" href="#args-optional"><code>args</code> (optional)</a></h3>
+<p>Additional arguments for the application invocation
+Example:</p>
+<pre><code class="language-yaml">args:
+  - /message/hello
+</code></pre>
+<h3 id="uid"><a class="header" href="#uid"><code>uid</code></a></h3>
+<p>The user ID used to mount the container
+Example:</p>
+<pre><code class="language-yaml">uid: 1000
+</code></pre>
+<h3 id="gid"><a class="header" href="#gid"><code>gid</code></a></h3>
+<p>The group ID used to mount the container
+Example:</p>
+<pre><code class="language-yaml">gid: 1000
+</code></pre>
+<h3 id="env"><a class="header" href="#env"><code>env</code></a></h3>
+<p>List of additional environment variables and their values
+Example:</p>
+<pre><code class="language-yaml">env:
+  RUST_BACKTRACE: 1
+</code></pre>
+<h3 id="autostart"><a class="header" href="#autostart"><code>autostart</code></a></h3>
+<p>Whether or not this container should be run upon northstar startup
+Example:</p>
+<pre><code class="language-yaml">autostart: true
+</code></pre>
+<h3 id="cgroups"><a class="header" href="#cgroups"><code>cgroups</code></a></h3>
+<p>CGroup configuration
+Examples:</p>
+<pre><code class="language-yaml">cgroups:
+  cpu:
+    shares: 100
+</code></pre>
+<pre><code class="language-yaml">cgroups:
+  memory:
+    limit_in_bytes: 10000000
+    swappiness: 0
+</code></pre>
+<h3 id="seccomp-optional"><a class="header" href="#seccomp-optional"><code>seccomp</code> (optional)</a></h3>
+<p>SecComp configuration
+Example:</p>
+<p>Example:</p>
+<pre><code class="language-yaml">seccomp:
+  clone: 1
+  mmap: arg2 in ~PROT_EXEC || arg2 in ~PROT_WRITE
+  prctl: 1
+  munmap: 1
+  mprotect: arg2 in ~PROT_EXEC || arg2 in ~PROT_WRITE
+  futex: 1
+  openat: 1
+  close: 1
+  execve: 1
+</code></pre>
+<h3 id="mounts"><a class="header" href="#mounts"><code>mounts</code></a></h3>
+<p>List of bind mounts and resources
+Example:</p>
+<pre><code class="language-yaml">mounts:
+    /lib:
+      host: /lib
+    /lib64:
+      host: /lib64
+    /system:
+      host: /system
+</code></pre>
+<h3 id="capabilities-optional"><a class="header" href="#capabilities-optional"><code>capabilities</code> (optional)</a></h3>
+<p>String containing capability names to give to new container
+Example:</p>
+<pre><code class="language-yaml">capabilities:
+  - cap_net_raw
+</code></pre>
+<h3 id="suppl_groups-optional"><a class="header" href="#suppl_groups-optional"><code>suppl_groups</code> (optional)</a></h3>
+<p>String containing group names to give to new container
+Example:</p>
+<pre><code class="language-yaml">suppl_groups:
+  - inet
+</code></pre>
+<h3 id="io-optional"><a class="header" href="#io-optional"><code>io</code> (optional)</a></h3>
+<p>Input/Output configuration
+Example:</p>
+<pre><code class="language-yaml">io:
+  stdout:
+    log:
+      - DEBUG
+      - hello
+</code></pre>
+<h2 id="signatureyaml-1"><a class="header" href="#signatureyaml-1">Signature.yaml</a></h2>
+<p>The file <code>signature.yaml</code> contains the hash of <code>manifest.yaml</code> and both hash and dm-verity information of the squashfs image <code>fs.img</code>.
+If the NPK is signed, a second entry in <code>signature.yaml</code> references the name of the key used to sign the NPK as well as the base64 encoded signature of the verity hash.</p>
+<p>An example <code>signature.yaml</code> looks as follows:</p>
+<pre><code class="language-yaml">manifest.yaml:
+  hash: ee5967e740febb3a1e018e189ed21412f8bf71d34bea7b506f709d37984e90cc
+fs.img:
+  hash: 35d1a25870a2bf25328a250243972b931e220057cc2d0fe998aef163ea59142e
+  verity-hash: f14909e6b8e6ca919f9086d54089feed49053f1e590a6f2dccad171960686eff
+  verity-offset: 397312
+---
+key: northstar
+signature: aDnKZ8JQ5tegOqKM2TW/ULU2DAlcVG7ieyS0ZaDGnRHT5Yggcgog5QbD0ZnTyGIFY8bo0+lToQu+BcK2XA35BA==
+</code></pre>
+<h2 id="resource-containers"><a class="header" href="#resource-containers">Resource Containers</a></h2>
+<p>Containers without an <code>init</code> field in their <code>manifest.yaml</code> are called <strong>Resource Containers</strong>.
+They are useful to provide common data to other containers.
+To add a reference to a resources container, we have to add an entry in the <code>mount</code> field of manifest of the referencing container.</p>
+<p>For example, the <code>hello-ferris</code> container references the <code>message</code> container which provides a required string:</p>
+<pre><code class="language-yaml">mounts:
+  /bin:
+    resource: ferris:0.0.1:/
+  /lib:
+    host: /lib
+  /lib64:
+    host: /lib64
+  /system:
+    host: /system
+  /message:
+    resource: message:0.0.1:/
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
